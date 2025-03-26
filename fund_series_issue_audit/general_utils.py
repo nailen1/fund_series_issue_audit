@@ -51,7 +51,7 @@ def get_data_from_response(response):
         return None
 
 def get_mapping_fund_names():
-    fund_mapping_url = "http://127.0.0.1:8080/api/fundcode/mapping/all/"
+    fund_mapping_url = "https://rpa.inveski.com:8080/api/fundcode/mapping/all/"
     response = fetch_response_from_url(fund_mapping_url)
     mapping = get_data_from_response(response)
     return mapping

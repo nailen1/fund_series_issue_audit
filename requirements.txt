@@ -1,4 +1,3 @@
 financial_dataset_preprocessor>=0.1.10
 scipy>=1.11.0
-database_managing>=0.1.5
 canonical_transformer>=0.2.4
