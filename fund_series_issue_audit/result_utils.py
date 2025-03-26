@@ -4,6 +4,7 @@ from .general_utils import FUND_CODES_MAIN, MAPPING_FUND_NAMES, MAPPING_INCEPTIO
 from .portfolio_vector import PortfolioVector
 from .vector_pair import VectorPair
 from .date_condition_utils import get_pairs_filtered_by_6_months_inception_condition
+from .asset_condition_utils import get_asset_vector_string
 from tqdm import tqdm
 import pandas as pd
 from shining_pebbles import get_today, get_yesterday, get_date_n_days_ago
@@ -41,7 +42,7 @@ def get_dot_products_of_fund_series_issue():
         data.append(dct)
     return data
 
-def save_results_of_fund_series_issue(option_save=True):
+def save_results_of_fund_series_issue(option_save=True, option_asset_validity=True):
     dot_products = get_dot_products_of_fund_series_issue()
     results = pd.DataFrame(dot_products).sort_values(by='dot_product', ascending=False)
     results = results[results['dot_product']<1.0]
@@ -49,7 +50,11 @@ def save_results_of_fund_series_issue(option_save=True):
     results['fund_name_j'] = results['fund_code_j'].map(MAPPING_FUND_NAMES)
     results['inception_date_i'] = results['fund_code_i'].map(MAPPING_INCEPTION_DATES)
     results['inception_date_j'] = results['fund_code_j'].map(MAPPING_INCEPTION_DATES)
-    results = results.reset_index(drop=True)
+    results['asset_vector_i'] = results['fund_code_i'].apply(lambda x: get_asset_vector_string(fund_code=x))
+    results['asset_vector_j'] = results['fund_code_j'].apply(lambda x: get_asset_vector_string(fund_code=x))
+    results['asset_validity'] = results['asset_vector_i'] == results['asset_vector_j']
+    if option_asset_validity:
+        results = results[results['asset_validity']==True].reset_index(drop=True)
     if option_save:
         map_dataframe_to_csv_including_korean(results.reset_index(), file_folder=FILE_FOLDER['result'], file_name=f'dataset-series_issue-at{get_yesterday().replace("-", "")}-save{get_today().replace("-", "")}.csv')
     return results
@@ -88,6 +93,7 @@ def get_comparison_of_row_in_df(df, index_row, date_ref=None, option_delta=True)
     if option_delta:
         comparison['delta'] = comparison.iloc[:,-3] - comparison.iloc[:,-1]
     comparison = comparison.fillna('-')
+    print(f'Calculated dot product <pv_i|pv_j> == {vp.dot_product}')
     return comparison
 
 # def filter_df_by_inception_date_condition(df, option_save=True):
