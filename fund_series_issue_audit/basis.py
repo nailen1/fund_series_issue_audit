@@ -1,6 +1,6 @@
 import numpy as np
 
-def compute_normalized_dot_product(v1, v2):
+def compute_normalized_inner_product(v1, v2):
     """
     Calculate the dot product of two normalized vectors (cosine similarity)
     

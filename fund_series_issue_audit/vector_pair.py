@@ -1,4 +1,4 @@
-from .basis import compute_normalized_dot_product
+from .basis import compute_normalized_inner_product
 import numpy as np
 
 class VectorPair:
@@ -11,7 +11,7 @@ class VectorPair:
         self.vector_j = None
         self.coeffs_i = None
         self.coeffs_j = None
-        self.dot_product = None
+        self.inner_product = None
         self._load_pipeline()
 
     def get_comparison(self):
@@ -35,17 +35,17 @@ class VectorPair:
             self.coeffs_j = np.array(self.vector_j.iloc[: ,-1])
         return self.coeffs_i, self.coeffs_j
 
-    def get_dot_product(self):
-        if self.dot_product is None:
-            self.dot_product = compute_normalized_dot_product(self.coeffs_i, self.coeffs_j)
-        return self.dot_product
+    def get_inner_product(self):
+        if self.inner_product is None:
+            self.inner_product = compute_normalized_inner_product(self.coeffs_i, self.coeffs_j)
+        return self.inner_product
     
     def _load_pipeline(self):
         try:
             self.get_comparison()
             self.get_basis()
             self.get_vectors()
-            self.get_dot_product()
+            self.get_inner_product()
             return True
         except Exception as e:
             print(f'_load_pipeline error: {e}')

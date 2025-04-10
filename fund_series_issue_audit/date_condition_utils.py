@@ -40,4 +40,5 @@ def get_valid_pairs(pairs):
 def get_pairs_filtered_by_6_months_inception_condition(df=MATRIX_DATE_DIFFERENCE):
     df_boolean = get_df_boolean(df)
     pairs = get_pairs_true_positions(df_boolean)
-    return get_valid_pairs(pairs)
+    pairs = remove_self_pairs(pairs)
+    return remove_permutation_duplicates(pairs)
