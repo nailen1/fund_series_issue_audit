@@ -104,4 +104,5 @@ def get_comparison_of_row_in_df(df, index_row, date_ref=None, option_delta=True)
 def load_automated_series_issue_audit_result(date_ref=None):
     regex = f'dataset-result_automated_series_issue_audit-at{date_ref.replace("-", "")}' if date_ref else 'dataset-result_automated_series_issue_audit-at'
     df = open_df_in_file_folder_by_regex(file_folder=FILE_FOLDER['result'], regex=regex)
+    df = df.reset_index()
     return df

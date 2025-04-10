@@ -2,6 +2,11 @@
 
 A Python package that provides a universal interface for transforming and manipulating time series data. This package offers flexible and efficient tools for handling various types of time series data transformations.
 
+## Version 0.1.4 Updates
+
+- Fixed result output formatting for better data handling
+- Added automatic index reset for consistent data structure
+
 ## Version 0.1.3 Updates
 
 - Enhanced automated filtering system for more accurate results
