@@ -60,12 +60,9 @@ def get_vp_of_row_in_df(df, index_row, date_ref=None):
     vp = VectorPair(pv_i=pv_i, pv_j=pv_j)
     return vp
 
-def get_comparison_of_row_in_df(df, index_row, date_ref=None, option_delta=True):
+def get_comparison_of_row_in_df(df, index_row, date_ref=None):
     date_ref = date_ref if date_ref else get_date_n_days_ago(get_yesterday(),1)
     vp = get_vp_of_row_in_df(df, index_row, date_ref=date_ref)
     comparison = vp.comparison
-    if option_delta:
-        comparison['delta'] = comparison.iloc[:,-3] - comparison.iloc[:,-1]
-    comparison = comparison.fillna('-')
     print(f'Calculated inner product <pv_i|pv_j> == {vp.inner_product}')
     return comparison

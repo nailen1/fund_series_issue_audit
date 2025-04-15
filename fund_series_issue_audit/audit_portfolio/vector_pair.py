@@ -14,9 +14,14 @@ class VectorPair:
         self.inner_product = None
         self._load_pipeline()
 
-    def get_comparison(self):
+    def get_comparison(self, option_delta=True):
         if self.comparison is None:
             comparison = self.pv_i.portfolio.merge(self.pv_j.portfolio, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}', f'_{self.pv_j.fund_code}'))
+            if self.pv_i.fund_code == self.pv_j.fund_code:
+                comparison = self.pv_i.portfolio.merge(self.pv_j.portfolio, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}({self.pv_i.date_ref})', f'_{self.pv_j.fund_code}({self.pv_j.date_ref})'))            
+            if option_delta:
+                comparison['delta'] = comparison.iloc[:,-3] - comparison.iloc[:,-1]
+            comparison = comparison.fillna('-')
             self.comparison = comparison
         return self.comparison
 

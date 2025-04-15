@@ -2,6 +2,13 @@
 
 A Python package for auditing and analyzing fund series issues. This package provides efficient tools for fund series issue auditing through portfolio vector comparison, asset composition validation, investor data analysis, and more.
 
+## Version 0.2.3 Updates
+
+- Enhanced vector pair comparison functionality
+- Improved delta calculation for same fund code comparison
+- Added date reference display for same fund comparisons
+- Moved delta calculation to vector_pair module for better code organization
+
 ## Version 0.2.2 Updates
 
 - Added threshold option to result loading function for better filtering
