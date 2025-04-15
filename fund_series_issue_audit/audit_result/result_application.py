@@ -25,8 +25,10 @@ def save_automated_series_issue_audit(date_ref=None, option_save=True):
         map_df_to_csv_including_korean(df=final_result, file_folder=FILE_FOLDER['result'], file_name=f'dataset-result_automated_series_issue_audit-at{date_ref.replace("-","")}-save{get_today().replace("-","")}.csv')
     return final_result
 
-def load_automated_series_issue_audit_result(date_ref=None):
+def load_automated_series_issue_audit_result(date_ref=None, option_threshold=True):
     regex = f'dataset-result_automated_series_issue_audit-at{date_ref.replace("-", "")}' if date_ref else 'dataset-result_automated_series_issue_audit-at'
     df = open_df_in_file_folder_by_regex(file_folder=FILE_FOLDER['result'], regex=regex)
     df = df.reset_index()
+    if option_threshold:
+        df = df[df['inner_product']>=0.8]
     return df
