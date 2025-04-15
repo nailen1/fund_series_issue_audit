@@ -1,8 +1,8 @@
-shining_pebbles>=0.5.3
-canonical_transformer>=0.2.4
-financial_dataset_preprocessor>=0.1.10
-scipy>=1.11.0
 openpyxl>=3.1.5
+scipy>=1.11.0
 requests>=2.31.0
 tqdm
+shining_pebbles>=0.5.3
+canonical_transformer>=0.2.4
+financial_dataset_preprocessor>=0.3.3
 fund_insight_engine>=0.1.3
