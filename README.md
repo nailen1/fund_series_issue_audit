@@ -1,6 +1,6 @@
-# Universal Timeseries Transformer
+# Fund Series Issue Audit
 
-A Python package that provides a universal interface for transforming and manipulating time series data. This package offers flexible and efficient tools for handling various types of time series data transformations.
+A Python package for auditing and analyzing fund series issues. This package provides efficient tools for fund series issue auditing through portfolio vector comparison, asset composition validation, investor data analysis, and more.
 
 ## Version 0.2.0 Updates
 
@@ -25,94 +25,94 @@ A Python package that provides a universal interface for transforming and manipu
 - Improved final judgment output functionality
 - Optimized performance for large dataset processing
 
-## Features
+## Key Features
 
-- Index Transformer
-  - Flexible time index manipulation
-  - Date range operations
-  - Frequency conversion
-- DataFrame Transformer
-  - Universal interface for time series operations
-  - Data alignment and merging
-  - Efficient data transformation
-- Timeseries Basis
-  - Core functionality for time series manipulation
-  - Common time series operations
+- Portfolio Vector Analysis
+  - Fund portfolio similarity calculation
+  - Inner product-based portfolio comparison
+  - Asset composition validation
+- Investor Data Analysis
+  - Investor count and total investment amount analysis
+  - Cross-fund investor overlap analysis
+- Automated Audit Reports
+  - Automatic series issue audit result generation
+  - CSV format result storage
+  - Korean language support for data output
 
 ## Installation
 
 You can install the package using pip:
 
 ```bash
-pip install universal-timeseries-transformer
+pip install fund-series-issue-audit
+```
+
+Or directly from GitHub:
+
+```bash
+pip install git+https://github.com/nailen1/fund_series_issue_audit.git
 ```
 
 ## Requirements
 
-- Python >= 3.8
+- Python >= 3.11
 - Dependencies:
-  - pandas
-  - numpy
+  - openpyxl >= 3.1.5
+  - scipy >= 1.11.0
+  - requests >= 2.31.0
+  - tqdm
+  - shining_pebbles >= 0.5.3
+  - canonical_transformer >= 0.2.4
+  - financial_dataset_preprocessor >= 0.3.3
+  - fund_insight_engine >= 0.1.3
 
 ## Usage Examples
 
-### 1. Basic Time Series Transformation
+### 1. Run Automated Series Issue Audit
 
 ```python
-from universal_timeseries_transformer import IndexTransformer, DataFrameTransformer
-import pandas as pd
+from fund_series_issue_audit.audit_result import save_automated_series_issue_audit
 
-# Create sample time series data
-df = pd.DataFrame({'value': [1, 2, 3, 4]},
-                  index=pd.date_range('2025-01-01', periods=4))
+# Run and save automated series issue audit
+result = save_automated_series_issue_audit(date_ref='2025-04-14')
 
-# Transform time series index
-index_transformer = IndexTransformer(df)
-weekly_data = index_transformer.to_weekly()
-
-# Apply data transformations
-df_transformer = DataFrameTransformer(weekly_data)
-result = df_transformer.rolling_mean(window=2)
+# Check results
+print(result.head())
 ```
 
-### 2. Advanced Time Series Operations
+### 2. Load Saved Audit Results
 
 ```python
-from universal_timeseries_transformer import TimeseriesBasis
+from fund_series_issue_audit.audit_result import load_automated_series_issue_audit_result
 
-# Initialize time series basis
-ts_basis = TimeseriesBasis(df)
+# Load audit results for a specific date
+audit_result = load_automated_series_issue_audit_result(date_ref='2025-04-14')
 
-# Perform complex transformations
-transformed_data = ts_basis.transform()
-```
-)
-
-# Find funds with borrowings
-funds_with_borrowings = search_funds_having_borrowings(date_ref='2025-02-21')
-
-# Get borrowing details
-fund_code = '100075'
-borrowing_details = get_borriwings_by_fund(fund_code=fund_code, date_ref='2025-02-21')
+# Check results
+print(audit_result.head())
 ```
 
-### 3. Check Repo Agreements
+### 3. Portfolio Vector Comparison Analysis
 
 ```python
-from financial_dataset_preprocessor import (
-    search_funds_having_repos,
-    get_repos_by_fund
-)
+from fund_series_issue_audit.audit_portfolio import PortfolioVector, VectorPair
 
-# Find funds with repos
-funds_with_repos = search_funds_having_repos(date_ref='2025-02-21')
+# Create portfolio vectors for two funds
+pv_i = PortfolioVector(fund_code='100142')
+pv_j = PortfolioVector(fund_code='100015')
 
-# Get repo details for a specific fund
-fund_code = '100075'
-repo_details = get_repos_by_fund(fund_code=fund_code, date_ref='2025-02-21')
+# Create and compare vector pair
+vp = VectorPair(pv_i, pv_j)
+
+# Calculate inner product (similarity)
+print(f'Inner product: {vp.inner_product}')
+
+# Detailed comparison results
+comparison = vp.comparison
+print(comparison)
 ```
 
-## Development
+## Development Setup
 
 To set up the development environment:
 
