@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from .general_utils import MAPPING_INCEPTION_DATES, FUND_CODES_MAIN
+from ..pseudo_consts import MAPPING_INCEPTION_DATES, FUND_CODES_MAIN
 
 def transform_mapping_datetime_inception_dates():
     filtered_inception_dates = {code: date_str for code, date_str in MAPPING_INCEPTION_DATES.items() 

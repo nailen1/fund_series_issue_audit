@@ -59,7 +59,3 @@ def get_mapping_fund_names(date_ref=None):
 
 def get_mapping_inception_dates(date_ref=None):
     return get_mapping_menu8186(col_for_range='설정일', date_ref=date_ref)
-
-FUND_CODES_MAIN = get_fund_codes_main()
-MAPPING_FUND_NAMES = get_mapping_fund_names()
-MAPPING_INCEPTION_DATES = get_mapping_inception_dates()

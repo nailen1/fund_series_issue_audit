@@ -1,4 +1,4 @@
-from .basis import compute_normalized_inner_product
+from ..basis import compute_normalized_inner_product
 import numpy as np
 
 class VectorPair:

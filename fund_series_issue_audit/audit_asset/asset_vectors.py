@@ -1,5 +1,5 @@
 from shining_pebbles import open_df_in_file_folder_by_regex
-from .basis import get_lexicographical_orderd_df
+from ..basis import get_lexicographical_orderd_df
 
 class AssetVectors:
     def __init__(self):

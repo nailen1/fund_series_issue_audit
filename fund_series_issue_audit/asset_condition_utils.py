@@ -1,4 +1,4 @@
-from .asset_vectors import AssetVectors
+from .audit_asset import AssetVectors
 
 ASSET_VECTORS = AssetVectors()
 

@@ -2,6 +2,18 @@
 
 A Python package that provides a universal interface for transforming and manipulating time series data. This package offers flexible and efficient tools for handling various types of time series data transformations.
 
+## Version 0.2.0 Updates
+
+- Major restructuring of modules into specialized subpackages:
+  - `audit_asset`: Asset vector analysis and validation
+  - `audit_date`: Date condition utilities and validation
+  - `audit_investor`: Investor data loading and analysis
+  - `audit_portfolio`: Portfolio vector comparison tools
+  - `audit_result`: Automated audit result generation and storage
+- Added new result_application module for complete automated audits
+- Added dependency on fund_insight_engine for enhanced analysis
+- Improved code organization and maintainability
+
 ## Version 0.1.4 Updates
 
 - Fixed result output formatting for better data handling
