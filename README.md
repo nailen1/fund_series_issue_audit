@@ -2,6 +2,11 @@
 
 A Python package for auditing and analyzing fund series issues. This package provides efficient tools for fund series issue auditing through portfolio vector comparison, asset composition validation, investor data analysis, and more.
 
+## Version 0.2.1 Updates
+
+- Updated documentation with English-only content for better international accessibility
+- Fixed minor bugs and improved code stability
+
 ## Version 0.2.0 Updates
 
 - Major restructuring of modules into specialized subpackages:
