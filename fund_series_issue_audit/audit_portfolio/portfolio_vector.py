@@ -39,6 +39,6 @@ class PortfolioVector:
             self.get_portfolio()
             return True
         except Exception as e:
-            print(f'_load_pipeline error: {e}')
+            print(f'PortfolioVector _load_pipeline error: {e}')
             return False
     

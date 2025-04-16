@@ -49,6 +49,6 @@ class AssetVectors:
             self.get_collection_of_vectors()
             return True
         except Exception as e:
-            print(e)
+            print(f'AssetVectors _load_pipeline error: {e}')
             return False
         
