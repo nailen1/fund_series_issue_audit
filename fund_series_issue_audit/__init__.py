@@ -5,3 +5,4 @@ from .audit_portfolio import *
 from .audit_date import *
 from .audit_result import *
 from .general_utils import *
+from .portfolio_info_application import *
