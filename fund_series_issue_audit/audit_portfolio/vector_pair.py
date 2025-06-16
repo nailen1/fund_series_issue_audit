@@ -16,9 +16,9 @@ class VectorPair:
 
     def get_comparison(self, option_delta=True):
         if self.comparison is None:
-            _comparison = self.pv_i.portfolio.merge(self.pv_j.portfolio, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}', f'_{self.pv_j.fund_code}'))
+            _comparison = self.pv_i.df.merge(self.pv_j.df, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}', f'_{self.pv_j.fund_code}'))
             if self.pv_i.fund_code == self.pv_j.fund_code:
-                _comparison = self.pv_i.portfolio.merge(self.pv_j.portfolio, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}({self.pv_i.date_ref})', f'_{self.pv_j.fund_code}({self.pv_j.date_ref})'))            
+                _comparison = self.pv_i.df.merge(self.pv_j.df, how='outer', left_index=True, right_index=True, suffixes=(f'_{self.pv_i.fund_code}({self.pv_i.date_ref})', f'_{self.pv_j.fund_code}({self.pv_j.date_ref})'))            
             if option_delta:
                 _comparison['delta'] = _comparison.iloc[:,-3] - _comparison.iloc[:,-1]
             self._comparison = _comparison

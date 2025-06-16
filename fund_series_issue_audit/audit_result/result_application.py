@@ -1,8 +1,9 @@
+from shining_pebbles import get_yesterday, get_today, open_df_in_file_folder_by_regex
+from canonical_transformer import map_df_to_csv_including_korean
 from ..audit_result import save_results_of_fund_series_issue
 from ..audit_investor import get_mapping_indivs, get_mapping_totals
 from ..path_director import FILE_FOLDER
-from shining_pebbles import get_yesterday, get_today, open_df_in_file_folder_by_regex
-from canonical_transformer import map_df_to_csv_including_korean
+from .result_utils import get_comparison_of_row_in_df
 
 def save_automated_series_issue_audit(date_ref=None, option_save=True, option_threshold=0.8):
     date_ref = date_ref if date_ref else get_yesterday()
@@ -33,3 +34,8 @@ def load_automated_series_issue_audit_result(date_ref=None, option_threshold=Tru
     if option_threshold:
         df = df[df['inner_product']>=0.8]
     return df
+
+def show_comparison(index, date_ref=None):
+    df = load_automated_series_issue_audit_result(date_ref=date_ref)
+    comparison = get_comparison_of_row_in_df(df, index, date_ref=date_ref)
+    return comparison

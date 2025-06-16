@@ -1,13 +1,12 @@
+import pandas as pd
+from tqdm import tqdm
+from shining_pebbles import get_today, get_yesterday, get_date_n_days_ago,open_df_in_file_folder_by_regex
+from canonical_transformer import map_dataframe_to_csv_including_korean
+from fund_insight_engine import get_mapping_fund_inception_dates_mongodb, get_mapping_fund_names_mongodb
 from ..audit_portfolio import PortfolioVector, VectorPair
 from ..audit_date import get_pairs_filtered_by_6_months_inception_condition
 from ..asset_condition_utils import get_asset_vector_string
 from ..path_director import FILE_FOLDER
-from ..general_utils import get_mapping_inception_dates
-from ..pseudo_consts import MAPPING_FUND_NAMES
-from shining_pebbles import get_today, get_yesterday, get_date_n_days_ago,open_df_in_file_folder_by_regex
-from canonical_transformer import map_dataframe_to_csv_including_korean
-import pandas as pd
-from tqdm import tqdm
 
 
 def get_inner_products_of_fund_series_issue(date_ref=None):
@@ -26,7 +25,8 @@ def save_results_of_fund_series_issue(option_save=True, option_asset_validity=Tr
     inner_products = get_inner_products_of_fund_series_issue(date_ref=date_ref)
     results = pd.DataFrame(inner_products).sort_values(by='inner_product', ascending=False)
     results = results[results['inner_product']<1.0]
-    MAPPING_INCEPTION_DATES = get_mapping_inception_dates()
+    MAPPING_FUND_NAMES = get_mapping_fund_names_mongodb(date_ref=date_ref)
+    MAPPING_INCEPTION_DATES = get_mapping_fund_inception_dates_mongodb(date_ref=date_ref)
     results['fund_name_i'] = results['fund_code_i'].map(MAPPING_FUND_NAMES)
     results['fund_name_j'] = results['fund_code_j'].map(MAPPING_FUND_NAMES)
     results['inception_date_i'] = results['fund_code_i'].map(MAPPING_INCEPTION_DATES)
@@ -34,6 +34,8 @@ def save_results_of_fund_series_issue(option_save=True, option_asset_validity=Tr
     results['asset_vector_i'] = results['fund_code_i'].apply(lambda x: get_asset_vector_string(fund_code=x))
     results['asset_vector_j'] = results['fund_code_j'].apply(lambda x: get_asset_vector_string(fund_code=x))
     results['asset_validity'] = results['asset_vector_i'] == results['asset_vector_j']
+    results['asset_validity'] = results['asset_validity'].apply(lambda x: True if x else False)
+    results['inner_product'] = results['inner_product'].apply(lambda x: round(x, 4))
     if option_asset_validity:
         results = results[results['asset_validity']==True].reset_index(drop=True)
     if option_save:
@@ -66,3 +68,4 @@ def get_comparison_of_row_in_df(df, index_row, date_ref=None):
     comparison = vp.comparison
     print(f'Calculated inner product <pv_i|pv_j> == {vp.inner_product}')
     return comparison
+
