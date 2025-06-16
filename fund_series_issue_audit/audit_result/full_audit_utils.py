@@ -11,7 +11,7 @@ def get_data_of_pair(i, j, date_ref=None):
     pv_i = PortfolioVector(fund_code=i, date_ref=date_ref)
     pv_j = PortfolioVector(fund_code=j, date_ref=date_ref)
     vp = VectorPair(pv_i, pv_j)
-    data = {'i': i, 'j': j, 'inner_product': vp.inner_product}
+    data = {'fund_code_i': i, 'fund_code_j': j, 'inner_product': vp.inner_product}
     return data
 
 def generate_full_audit(date_ref=None, option_save=True):
@@ -19,17 +19,17 @@ def generate_full_audit(date_ref=None, option_save=True):
     PAIRS = list(combinations(FUND_CODES_MAIN, 2))
     data = [get_data_of_pair(i,j, date_ref=date_ref) for i, j in tqdm(PAIRS)]
     df = pd.DataFrame(data)
-    df['name_i'] = df['i'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
-    df['name_j'] = df['j'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
-    df['inception_date_i'] = df['i'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
-    df['inception_date_j'] = df['j'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
+    df['name_i'] = df['fund_code_i'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
+    df['name_j'] = df['fund_code_j'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
+    df['inception_date_i'] = df['fund_code_i'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
+    df['inception_date_j'] = df['fund_code_j'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
     df['inner_product'] = df['inner_product'].apply(lambda x: round(x, 4))
     df = df.sort_values(by='inner_product', ascending=False)
-    COLS_ORDERED = ['i', 'j', 'name_i', 'name_j', 'inception_date_i', 'inception_date_j', 'inner_product']
+    COLS_ORDERED = ['fund_code_i', 'fund_code_j', 'name_i', 'name_j', 'inception_date_i', 'inception_date_j', 'inner_product']
     df = df[COLS_ORDERED]
     df = df.reset_index(drop=True)
     if option_save:
-        map_df_to_csv_including_korean(df=df, file_folder=FILE_FOLDER['result'], file_name=f'dataset-full_audit-at{date_ref.replace("-","")}-save{get_today().replace("-","")}.csv')
+        map_df_to_csv_including_korean(df=df, file_folder=FILE_FOLDER['result'], file_name=f'dataset-full_audit-at{date_ref.replace("-","")}-save{get_today().replace("-","")}.csv', include_index=True)
     return df
 
 def load_full_audit(date_ref=None, option_threshold=None):

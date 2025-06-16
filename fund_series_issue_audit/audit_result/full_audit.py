@@ -5,6 +5,7 @@ from .result_utils import get_comparison_of_row_in_df
 class FullAudit:
     def __init__(self, date_ref=None, option_threshold=0.8):
         self.date_ref = date_ref if date_ref else get_yesterday()
+        self.option_threshold = option_threshold
         self._generate = None
         self._load = None
 
