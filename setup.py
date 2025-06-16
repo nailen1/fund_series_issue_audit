@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='fund_series_issue_audit',
-    version='0.2.8',
+    version='0.2.9',
     packages=find_packages(),
     install_requires=required,
     author='June Young Park',
