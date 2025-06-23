@@ -1,6 +1,6 @@
 from ..path_director import FILE_FOLDER
 from ..pseudo_consts import MAPPING_FUND_NAMES
-from shining_pebbles import load_xlsx_in_file_folder_by_regex, get_today, open_df_in_file_folder_by_regex
+from shining_pebbles import load_xlsx_in_file_folder_by_regex, get_today, open_df_in_file_folder_by_regex, scan_files_including_regex
 from canonical_transformer import get_inverse_mapping, map_df_to_csv, get_inverse_mapping, get_mapping_of_column_pairs
 
 def get_inverse_mapping_fund_names():
@@ -69,16 +69,27 @@ def save_preprocessed_df_number_of_investors(date_ref=None, option_save=True):
         map_df_to_csv(df=df.reset_index(), file_folder=FILE_FOLDER['investor'], file_name=f'dataset-number_of_investors-at{get_today().replace("-","")}-save{get_today().replace("-","")}.csv')
     return df
 
-def load_number_of_investors(date_ref=None):
+def extract_infimum_date(date_ref=None, option_verbose=False):
     file_folder = FILE_FOLDER['investor']
-    regex = f'dataset-number_of_investors-at{date_ref.replace("-","")}' if date_ref else f'dataset-number_of_investors.*.csv'
+    regex = 'dataset-number_of_investors-at'
+    file_names = scan_files_including_regex(file_folder=file_folder, regex=regex)
+    dates_existing = [file_name.split('-at')[1].split('-save')[0] for file_name in file_names]
+    date_latest = sorted([date for date in dates_existing if date <= date_ref.replace("-","")])[-1] if date_ref else sorted(dates_existing)[-1]
+    if option_verbose:
+        print(f'infimum date in investors database: {date_latest[:4]}-{date_latest[4:6]}-{date_latest[6:]}')
+    return date_latest
+
+def load_number_of_investors(date_ref=None, option_verbose=False):
+    date_ref = extract_infimum_date(date_ref=date_ref, option_verbose=option_verbose)
+    file_folder = FILE_FOLDER['investor']
+    regex = f'dataset-number_of_investors-at{date_ref.replace("-","")}'
     df = open_df_in_file_folder_by_regex(file_folder=file_folder, regex=regex)
     return df
 
-def get_mapping_indivs():
-    nums = load_number_of_investors().reset_index()
+def get_mapping_indivs(date_ref=None, option_verbose=False):
+    nums = load_number_of_investors(date_ref=date_ref, option_verbose=option_verbose).reset_index()
     return get_mapping_of_column_pairs(nums, key_col='fund_code', value_col='num_of_individual')
 
-def get_mapping_totals():
-    nums = load_number_of_investors().reset_index()
+def get_mapping_totals(date_ref=None, option_verbose=False):
+    nums = load_number_of_investors(date_ref=date_ref, option_verbose=option_verbose).reset_index()
     return get_mapping_of_column_pairs(nums, key_col='fund_code', value_col='num_total')

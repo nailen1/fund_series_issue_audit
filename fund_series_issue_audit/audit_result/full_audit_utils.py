@@ -19,13 +19,13 @@ def generate_full_audit(date_ref=None, option_save=True):
     PAIRS = list(combinations(FUND_CODES_MAIN, 2))
     data = [get_data_of_pair(i,j, date_ref=date_ref) for i, j in tqdm(PAIRS)]
     df = pd.DataFrame(data)
-    df['name_i'] = df['fund_code_i'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
-    df['name_j'] = df['fund_code_j'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
+    df['fund_name_i'] = df['fund_code_i'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
+    df['fund_name_j'] = df['fund_code_j'].map(get_mapping_fund_names_mongodb(date_ref=date_ref))
     df['inception_date_i'] = df['fund_code_i'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
     df['inception_date_j'] = df['fund_code_j'].map(get_mapping_fund_inception_dates_mongodb(date_ref=date_ref))
     df['inner_product'] = df['inner_product'].apply(lambda x: round(x, 4))
     df = df.sort_values(by='inner_product', ascending=False)
-    COLS_ORDERED = ['fund_code_i', 'fund_code_j', 'name_i', 'name_j', 'inception_date_i', 'inception_date_j', 'inner_product']
+    COLS_ORDERED = ['fund_code_i', 'fund_code_j', 'fund_name_i', 'fund_name_j', 'inception_date_i', 'inception_date_j', 'inner_product']
     df = df[COLS_ORDERED]
     df = df.reset_index(drop=True)
     if option_save:

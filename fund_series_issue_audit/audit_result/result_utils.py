@@ -7,7 +7,7 @@ from ..audit_portfolio import PortfolioVector, VectorPair
 from ..audit_date import get_pairs_filtered_by_6_months_inception_condition
 from ..asset_condition_utils import get_asset_vector_string
 from ..path_director import FILE_FOLDER
-
+from fund_series_issue_audit.audit_filter import get_filtered_pairs
 
 def get_inner_products_of_fund_series_issue(date_ref=None):
     data = []
@@ -69,3 +69,34 @@ def get_comparison_of_row_in_df(df, index_row, date_ref=None):
     print(f'Calculated inner product <pv_i|pv_j> == {vp.inner_product}')
     return comparison
 
+def append_inner_products_in_df(df, date_ref=None, option_round=4):
+    df = df.copy()
+    for idx, row in tqdm(df.iterrows()):
+        pv_i = PortfolioVector(fund_code=row['fund_code_i'], date_ref=date_ref)
+        pv_j = PortfolioVector(fund_code=row['fund_code_j'], date_ref=date_ref)
+        vp = VectorPair(pv_i=pv_i, pv_j=pv_j)
+        df.at[idx, 'inner_product'] = round(vp.inner_product, option_round)
+    return df
+
+def get_df_filtered_series_issue_audit(date_ref=None, option_round=4, option_concise=False, option_save=True):
+    date_ref = date_ref if date_ref else get_yesterday()
+    df = get_filtered_pairs(date_ref=date_ref, option_concise=option_concise).copy()
+    df = append_inner_products_in_df(df, date_ref=date_ref, option_round=option_round)
+    df = df.sort_values(by='inner_product', ascending=False).reset_index(drop=True)
+    if option_save:
+        map_dataframe_to_csv_including_korean(df.reset_index(drop=True), file_folder=FILE_FOLDER['result'], file_name=f'dataset-series_issue_audit-at{date_ref.replace("-", "")}-save{get_today().replace("-", "")}.csv')
+    return df
+
+def load_series_issue_audit_result(date_ref=None, option_threshold=0.8, option_concise=False):
+    regex = f'dataset-series_issue_audit-at{date_ref.replace("-", "")}' if date_ref else 'dataset-series_issue_audit-at'
+    df = open_df_in_file_folder_by_regex(file_folder=FILE_FOLDER['result'], regex=regex)
+    df = df.reset_index()
+    if option_threshold:
+        df = df[df['inner_product']>=option_threshold]
+    if option_concise:
+        df['fund_i'] = df.apply(lambda row: f"{row['fund_name_i']} ({row['fund_code_i']})", axis=1)
+        df['fund_j'] = df.apply(lambda row: f"{row['fund_name_j']} ({row['fund_code_j']})", axis=1)
+        df = df.drop(columns=['fund_code_i', 'fund_code_j', 'fund_name_i', 'fund_name_j', 'inception_date_i', 'inception_date_j', 'indivs_i', 'indivs_j', 'totals_i', 'totals_j'])
+        COLS_ORDERED = ['fund_i', 'fund_j', 'inner_product', 'delta_days', 'indivs', 'totals']
+        df = df[COLS_ORDERED]
+    return df
