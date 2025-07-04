@@ -1,6 +1,5 @@
-from fund_insight_engine import portfolio
 from shining_pebbles import get_yesterday
-from fund_insight_engine import Portfolio
+from fund_insight_engine import Portfolio, get_mapping_fund_names
 import pandas as pd
 from functools import cached_property
 
@@ -8,6 +7,10 @@ class PortfolioVector:
     def __init__(self, fund_code, date_ref=None):
         self.fund_code = fund_code
         self.date_ref = date_ref if date_ref else get_yesterday()
+
+    @cached_property
+    def fund_name(self):
+        return get_mapping_fund_names()[self.fund_code]
 
     @cached_property
     def p(self):
